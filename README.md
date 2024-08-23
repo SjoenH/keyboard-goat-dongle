@@ -5,6 +5,10 @@
 
 The Keyboard Goat Dongle is an Arduino-based USB device that emulates a keyboard to send playful "goat" messages to a Slack channel. This project is designed for ease of development and customization using Arduino.
 
+## Purpose
+
+In many workplaces, users often forget to lock their computers when stepping away, potentially exposing sensitive information. The Keyboard Goat Dongle provides a light-hearted, automated reminder to reinforce good security habits. By sending humorous messages featuring a Goat emoji, this dongle aims to gently remind users to lock their screens, making the security practice both memorable and engaging.
+
 ## Features
 
 - Emulates a USB keyboard using Arduino.
