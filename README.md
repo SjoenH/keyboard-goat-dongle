@@ -1,4 +1,5 @@
 # Keyboard Goat Dongle
+![Goat dongle](https://github.com/user-attachments/assets/974f2ad4-b35a-4387-8f85-b221f13cc5e3)
 
 ## Overview
 
