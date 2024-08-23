@@ -2,13 +2,13 @@
 
 ## Overview
 
-The Keyboard Goat Dongle is an Arduino-based USB device that emulates a keyboard to send playful "goat" messages and change the desktop background of the connected computer. This project is designed for ease of development and customization using Arduino.
+The Keyboard Goat Dongle is an Arduino-based USB device that emulates a keyboard to send playful "goat" messages to a Slack channel. This project is designed for ease of development and customization using Arduino.
 
 ## Features
 
 - Emulates a USB keyboard using Arduino.
 - Types out custom "goat" messages automatically.
-- Changes the desktop background to a goat-themed image (compatible with Windows and macOS).
+- Selects a random message from a predefined list.
 - Simple plug-and-play functionality.
 
 ## Requirements
@@ -16,7 +16,7 @@ The Keyboard Goat Dongle is an Arduino-based USB device that emulates a keyboard
 - Arduino board (e.g., Arduino Leonardo, Micro, or any board with native USB support).
 - Arduino IDE for programming.
 - A computer with a USB port.
-- Compatible with Windows or macOS for background change functionality.
+- Slack installed and configured on the computer.
 
 ## Installation
 
@@ -30,43 +30,55 @@ The Keyboard Goat Dongle is an Arduino-based USB device that emulates a keyboard
 
 3. **Connect the Dongle:**
    - After uploading, unplug and replug the Arduino board into a USB port.
-   - The dongle will start typing the pre-configured messages and changing the desktop background.
+   - The dongle will start typing the pre-configured random messages in Slack.
 
 ## Configuration
 
-You can customize the messages and the desktop background by editing the Arduino sketch:
+You can customize the messages and the Slack channel by editing the Arduino sketch:
 
 1. **Edit Messages:**
    - Open the Arduino sketch (`KeyboardGoatDongle.ino`).
    - Modify the `goatMessages` array with your desired messages.
 
-2. **Change Desktop Background:**
-   - Update the `backgroundImagePath` variable in the sketch to point to the goat-themed image. This feature works for both Windows and macOS.
+2. **Change Target Channel:**
+   - Update the `navigateToChannel("henry");` line in the `setup()` function to specify your desired Slack channel.
 
 ### Example Configuration
 
 ```cpp
-// Messages to be typed out by the dongle
+// Array of absurd goat messages
 String goatMessages[] = {
-  "Hello from the Goat! :goat:",
-  "Moo-ve over, here comes the goat! :goat:"
+    "The Goat says Baaa! :goat: :party_parrot:",
+    "Goat takeover! :goat: :tada:",
+    "Baaa-rilliant! :goat: :sparkles:",
+    "Goat's in charge! :goat: :robot:",
+    "Moo-ving over, it's the Goat! :goat: :cow:",
+    "Goat’s got the power! :goat: :zap:",
+    "Baaa-ck at it again! :goat: :fire:",
+    "The Goat’s here to party! :goat: :confetti_ball:",
+    "Goat mode activated! :goat: :rocket:",
+    "Goat's new mantra: Baaa! :goat: :smile:",
+    "Here’s a baa for you! :goat: :wave:",
+    "The Goat’s in control! :goat: :thumbsup:",
+    "Baaa-rage incoming! :goat: :bomb:",
+    "Goat's got the vibes! :goat: :sunglasses:",
+    "Say hello to the Goat! :goat: :hello:"
 };
 
-// Path to the goat-themed image (Windows or macOS)
-String backgroundImagePath = "C:\\path\\to\\goat-image.jpg"; // Windows
-// String backgroundImagePath = "/path/to/goat-image.jpg"; // macOS
+// Target Slack channel
+String channelName = "henry"; // Change this to your Slack channel name
 ```
 
 ## Usage
 
-- **After Plugging In:** The dongle will begin typing the predefined messages and change the desktop background automatically.
-- **Customization:** Adjust the Arduino sketch to update messages and background images as needed.
+- **After Plugging In:** The dongle will begin typing random predefined goat messages in the specified Slack channel.
+- **Customization:** Adjust the Arduino sketch to update messages and channel names as needed.
 
 ## Troubleshooting
 
 - **Dongle Not Recognized:** Check that the Arduino board is properly connected and recognized by your computer.
 - **Messages Not Typing:** Ensure the Arduino sketch is correctly uploaded and messages are properly configured.
-- **Desktop Background Not Changing:** Verify the image path in the sketch and confirm that the file is accessible.
+- **Slack Channel Not Found:** Verify the channel name in the sketch matches exactly with the Slack channel name.
 
 ## Contributing
 
