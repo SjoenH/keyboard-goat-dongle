@@ -36,7 +36,7 @@ void setup() {
     openSlack();
 
     // Navigate to the correct channel and send the message
-    navigateToChannel("henry");
+    navigateToChannel("stavanger");
     typeMessage(getRandomGoatMessage());
 
     // End Keyboard library
