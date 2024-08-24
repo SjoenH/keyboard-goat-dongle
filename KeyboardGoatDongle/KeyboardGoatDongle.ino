@@ -1,4 +1,7 @@
-#include <Keyboard.h>
+#include <USB.h>
+#include <USBHIDKeyboard.h>
+
+USBHIDKeyboard Keyboard;
 
 // Channel name to post to
 const String CHANNEL_NAME = "stavanger";
@@ -32,10 +35,8 @@ String goatMessages[] = {
 const int numMessages = sizeof(goatMessages) / sizeof(goatMessages[0]);
 
 void setup() {
-  // Seed the random number generator
-  randomSeed(analogRead(0));
-
-  // Start Keyboard library
+  // Initialize USB and Keyboard
+  USB.begin();
   Keyboard.begin();
 
   delay(OPEN_SLACK_DELAY);  // Wait for 2 seconds before starting
@@ -49,9 +50,6 @@ void setup() {
 
   // Change desktop background
   changeDesktopBackground();
-
-  // End Keyboard library
-  Keyboard.end();
 }
 
 void loop() {
@@ -136,22 +134,6 @@ void typeMessage(String message) {
   }
   Keyboard.press(KEY_RETURN);  // Press Enter to send the message
   delay(MESSAGE_DELAY);        // Wait for a short moment to ensure message is sent
-  Keyboard.releaseAll();
-}
-
-// Function to close the Keyboard Setup Assistant on macOS
-void closeKeyboardSetupAssistant() {
-  // Command + W to close the window
-  Keyboard.press(KEY_LEFT_GUI);  // Command key
-  Keyboard.press('w');
-  delay(SHORT_DELAY);
-  Keyboard.releaseAll();
-
-  delay(SHORT_DELAY);  // Wait for a short moment to ensure the window closes
-
-  // Press Enter to confirm if any dialog appears
-  Keyboard.press(KEY_RETURN);
-  delay(SHORT_DELAY);
   Keyboard.releaseAll();
 }
 
