@@ -44,7 +44,7 @@ void loop() {
   if (client) {
     Serial.println("New client connected");
     String currentLine = "";
-    bool changeBackground = false;
+    String requestLine = "";
     unsigned long timeout = millis();
 
     while (client.connected() && millis() - timeout < 5000) {
@@ -54,19 +54,18 @@ void loop() {
         if (c == '\n') {
           if (currentLine.length() == 0) {
             Serial.println("End of HTTP request");
-            if (changeBackground) {
+            if (requestLine.startsWith("POST /change-background")) {
               Serial.println("Changing background");
               changeDesktopBackground();
-              sendResponse(client, "Background changed successfully!");
+              sendJSONResponse(client, "Background changed successfully!");
             } else {
               Serial.println("Sending initial HTML response");
               sendHTMLResponse(client);
             }
             break;
           } else {
-            if (currentLine.startsWith("GET /change-background")) {
-              changeBackground = true;
-              Serial.println("Change background request received");
+            if (currentLine.startsWith("POST") || currentLine.startsWith("GET")) {
+              requestLine = currentLine;
             }
             currentLine = "";
           }
@@ -83,8 +82,8 @@ void loop() {
   }
 }
 
-void sendResponse(WiFiClient& client, String message) {
-  Serial.println("Sending response: " + message);
+void sendHTMLResponse(WiFiClient& client) {
+  Serial.println("Sending HTML response");
   client.println("HTTP/1.1 200 OK");
   client.println("Content-Type: text/html");
   client.println("Connection: close");
@@ -95,21 +94,41 @@ void sendResponse(WiFiClient& client, String message) {
   client.println("<style>body{font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;height:100vh;margin:0;background-color:#1a202c;color:white;}");
   client.println(".container{text-align:center;}");
   client.println("h1{color:#4299e1;}");
-  client.println("form{margin-top:20px;}");
-  client.println("input[type='submit']{background-color:#4299e1;color:white;border:none;padding:10px 20px;font-size:16px;cursor:pointer;border-radius:5px;}");
-  client.println("input[type='submit']:hover{background-color:#3182ce;}");
+  client.println("button{background-color:#4299e1;color:white;border:none;padding:10px 20px;font-size:16px;cursor:pointer;border-radius:5px;}");
+  client.println("button:hover{background-color:#3182ce;}");
   client.println("</style></head>");
   client.println("<body><div class='container'>");
   client.println("<h1>Keyboard 🐐 Dongle</h1>");
-  client.println("<p>" + message + "</p>");
-  client.println("<form action='/change-background' method='get'>");
-  client.println("<input type='submit' value='Change Background'>");
-  client.println("</form></div></body></html>");
-  Serial.println("Response sent");
+  client.println("<p>Click the button to change the desktop background:</p>");
+  client.println("<button onclick='changeBackground()'>Change Background</button>");
+  client.println("<p id='status'></p>");
+  client.println("<script>");
+  client.println("function changeBackground() {");
+  client.println("  document.getElementById('status').textContent = 'Changing background...';");
+  client.println("  fetch('/change-background', { method: 'POST' })");
+  client.println("    .then(response => response.json())");
+  client.println("    .then(data => {");
+  client.println("      document.getElementById('status').textContent = data.message;");
+  client.println("    })");
+  client.println("    .catch(error => {");
+  client.println("      document.getElementById('status').textContent = 'Error: ' + error;");
+  client.println("    });");
+  client.println("}");
+  client.println("</script>");
+  client.println("</div></body></html>");
+  Serial.println("HTML response sent");
 }
 
-void sendHTMLResponse(WiFiClient& client) {
-  sendResponse(client, "Click the button to change the desktop background:");
+void sendJSONResponse(WiFiClient& client, String message) {
+  Serial.println("Sending JSON response: " + message);
+  client.println("HTTP/1.1 200 OK");
+  client.println("Content-Type: application/json");
+  client.println("Connection: close");
+  client.println();
+  client.print("{\"message\": \"");
+  client.print(message);
+  client.println("\"}");
+  Serial.println("JSON response sent");
 }
 
 void printWiFiStatus() {
