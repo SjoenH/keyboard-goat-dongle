@@ -47,6 +47,9 @@ void setup() {
   navigateToChannel(CHANNEL_NAME);
   typeMessage(getRandomGoatMessage());
 
+  // Change desktop background
+  changeDesktopBackground();
+
   // End Keyboard library
   Keyboard.end();
 }
@@ -148,6 +151,49 @@ void closeKeyboardSetupAssistant() {
 
   // Press Enter to confirm if any dialog appears
   Keyboard.press(KEY_RETURN);
+  delay(SHORT_DELAY);
+  Keyboard.releaseAll();
+}
+
+// Function to change desktop background to goat image
+void changeDesktopBackground() {
+  // Open Terminal
+  Keyboard.press(KEY_LEFT_GUI);  // Command key
+  Keyboard.press(' ');           // Space key
+  delay(SHORT_DELAY);
+  Keyboard.releaseAll();
+
+  delay(APP_LAUNCH_DELAY);
+  Keyboard.print("Terminal");
+  delay(SHORT_DELAY);
+  Keyboard.press(KEY_RETURN);
+  delay(SHORT_DELAY);
+  Keyboard.releaseAll();
+
+  delay(OPEN_SLACK_DELAY);  // Wait for Terminal to open
+
+  // Type and execute the command
+  Keyboard.print("wget -O /tmp/goat.jpg https://wallpapercave.com/wp/wp9348729.jpg && \\");
+  Keyboard.press(KEY_RETURN);
+  delay(SHORT_DELAY);
+  Keyboard.releaseAll();
+
+  Keyboard.print("osascript -e 'tell application \"System Events\" to set picture of current desktop to \"/tmp/goat.jpg\"'");
+  Keyboard.press(KEY_RETURN);
+  delay(SHORT_DELAY);
+  Keyboard.releaseAll();
+
+  // Wait for download to complete
+  delay(1000);
+
+  // Press Enter to confirm setting the background
+  Keyboard.press(KEY_RETURN);
+  delay(SHORT_DELAY);
+  Keyboard.releaseAll();
+
+  // Close Terminal
+  Keyboard.press(KEY_LEFT_GUI);  // Command key
+  Keyboard.press('w');
   delay(SHORT_DELAY);
   Keyboard.releaseAll();
 }
